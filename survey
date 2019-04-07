@@ -1,0 +1,26 @@
+@app.route("/form", methods=["POST", "GET"])
+def post_form():
+    if request.method == 'POST':
+        # validate that values in the table
+        if not request.form.get('Name') and not request.form.get('House') and not request.form.get('Position'):
+            # redirect to the error page and mash python with html
+            return render_template("error.html", message="You must fill out the form")
+        else:
+            # open csv file and start writing
+            with open('survey.csv', 'wt') as csv_file:
+                header = ['Name', 'House', 'Position']
+                writer = csv.DictWriter(csv_file, fieldnames=header)
+                writer.writeheader()
+                writer.writerow({"Name": request.form.get("Name"), "House": request.form.get("House"), "Position": request.form.get("Position")})
+                return redirect("/sheet")
+
+
+@app.route("/sheet", methods=["GET"])
+def get_sheet():
+    if not request.method == "GET":
+        return render_template("error.html", message="The table can't be empty")
+    else:
+        with open('survey.csv', 'r') as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+            students = list(csv_reader)
+            return render_template("sheet.html")
