@@ -12,9 +12,11 @@
         <tbody>
         {% for student in students %}
             <tr>
-                <td>{{ student["Name"] }}</td>
-                <td>{{ student["House"] }}</td>
-                <td>{{ student["Position"] }}</td>
+                {% for fieldname in students %}
+                <td>{{ student.Name }}</td>
+                <td>{{ student.House }}</td>
+                <td>{{ student.Position }}</td>
+                {% endfor %}
             </tr>
         {% endfor %}
         </tbody>
